@@ -21,7 +21,7 @@ public class JDBCUtil {
 		try { 
 			Class.forName(driver);  
 			conn = DriverManager.getConnection(url, "C##HR12", "1234");
-			System.out.println("DB 연결이 성공했습니다.");
+//			System.out.println("DB 연결이 성공했습니다.");
 					
 		}catch (Exception e) {
 			System.out.println("DB 연결이 실패했습니다.");
