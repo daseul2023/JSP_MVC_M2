@@ -24,9 +24,19 @@ public class BoardDAO {
 	// DB의 Board 테이블의 글 상세 조회 : 레코드 1개 <=== DTO
 	private final String BOARD_GET = "select * from board where seq = ?";
 	
+	// DB의 Board 테이블의 업데이트 쿼리 
+	private final String BOARD_UPDATE = "update board set title= ?, write= ? , content = ? where seq = ?"; 
+	
+	// DB의 Board 테이블의 레코드를 삭제
+	private final String BOARD_DELETE = "delete board where set = ?";
+	
+	// 글 조회수 늘리는 쿼리
+	private final String ADD_CNT = "update board set cnt = cnt +1 where seq = ?";
+	
 	//insertBoard(BoardDTO dto) 메소드 : 
 	public void insertBoard (BoardDTO dto) {
 		System.out.println("insertBoard 기능 처리 =");
+		
 		
 		try {
 			
@@ -110,6 +120,12 @@ public class BoardDAO {
 	// 글 상세 조회 : getBoard(dto)
 	public BoardDTO getBoard(BoardDTO dto) {
 		System.out.println("getBoard 메소드 호출 성공");
+		
+		// 조회수 증가 메소드 호출
+		addCNT(dto);
+		
+		
+		
 		BoardDTO board = new BoardDTO();
 		
 		try {
@@ -145,5 +161,84 @@ public class BoardDAO {
 	}
 	
 	
+	
+	
+	// 글 수정 메소드 : updateBoard(dto)
+	public void updateBoard(BoardDTO dto) {
+		System.out.println("updateBoard 메소드 호출됨");
+		
+		try {
+			conn = JDBCUtil.getConnection(); 
+			//BOARD_UPDATE = "update board set title= ?, write= ? , content = ? where seq = ?"
+			pstmt = conn.prepareStatement(BOARD_UPDATE); 
+			
+			// ? 변수에 값을 할당 
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getWrite());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setInt(4,dto.getSeq());
+			
+			//쿼리를 실행
+			pstmt.executeUpdate(); 		//insert, update, delete 구문일때 실행 
+			
+			System.out.println("DB 업테이트 성공 ");
+			
+		}catch (Exception e) {
+			System.out.println("DB 업테이트 실패 ");
+			e.printStackTrace();
+			
+		}finally {
+			JDBCUtil.close(pstmt, conn);
+		}
+		
+	}
+	
+	// 글 삭제 메소드 : deleteBoard(dto)
+	public void deleteBoard (BoardDTO dto) {
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			// BOARD_DELETE = "delete board where seq =?"
+			pstmt = conn.prepareStatement(BOARD_DELETE);
+			
+			// ? 변수값 할당
+			pstmt.setInt(1, dto.getSeq());
+			
+			// 쿼리 실행
+			pstmt.executeUpdate(); // insert, update, delete
+			
+			System.out.println("DB의 레코드 삭제 성공");
+			}catch (Exception e) {
+				
+			System.out.println("DB의 레코드 삭제 실패");
+			e.printStackTrace();
+			
+			}finally {
+				JDBCUtil.close(pstmt, conn);
+			}
+	}
+		
+		// 글 조회수 늘리는 메소드
+		public void addCNT(BoardDTO dto) {
+
+			try {
+				conn = JDBCUtil.getConnection();
+				// ADD_CNT = "update board set cnt = cnt +1 where seq = ?"
+				pstmt = conn.prepareStatement(ADD_CNT);
+				
+				pstmt.setInt(1, dto.getSeq());
+				
+				// 쿼리 실행
+				pstmt.executeUpdate();
+				
+				System.out.println("조회수 입력 성공");
+			}catch (Exception e) {
+				System.out.println("조회수 입력 실패");
+				e.printStackTrace();
+			}finally {
+				JDBCUtil.close(pstmt, conn);
+			}
+			
+	}
 	
 }

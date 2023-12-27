@@ -20,13 +20,18 @@
 <title>글 상세 페이지</title>
 </head>
 <body>
+	<center>
 	<h1> 글 상세 페이지 (수정 가능하도록) </h1>
 	<hr>
 	<br><br>
-	<center>
-	<form>
+	<form method ="post" action = "updateBoard.do">
+	
+				<!--  글 수정시 조건을 처리 할 컬럼  -->
+				<input type="hidden" name = "seq" value = "<%= board.getSeq() %>" >
+				
 		<table border = "1" width = "700px" cellpadding = "5px"> 
-			<tr> <td bgcolor = "lime" align = "center"> 제목 </td> 
+			<tr> 
+				 <td bgcolor = "lime" align = "center"> 제목 </td> 
 				 <td> <input type = "text" name = "title" value = "<%= board.getTitle() %>"> </td> 
 			</tr>
 			<tr>	 
@@ -48,9 +53,21 @@
 			<tr>
 				 <td colspan = "2" align = "center"> <input type = "submit" value = "글 수정하기"> </td> 		
 			</tr>
+	
 		</table>
 	</form>
+	
+	<br> <br> 
+	<a href = "deleteBoard.do?seq=<%= board.getSeq() %>" >
+		글 삭제 
+	</a>
+	
+		<p /> <a href="http://Localhost:8181/JSP_MVC_M2"> 홈으로 </a>
+		<p /> <a href="getBoardList.do"> 글 목록 </a>
+		<p /> <a href="insertBoard.jsp"> 새 글 쓰기 </a>
+	
+	
+	
 	</center>
-
 </body>
 </html>
