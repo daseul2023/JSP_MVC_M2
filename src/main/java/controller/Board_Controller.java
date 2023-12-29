@@ -81,9 +81,30 @@ public class Board_Controller extends HttpServlet {
 		}else if (path.equals("/getBoardList.do")) {          // DB의 레코드를 출력하는 페이지, path 변수에는 / 붙여야함.
 			System.out.println("/getBoardList.do 요청");
 			//로직 처리 
+			
+			// 검색어 처리 부분
+			String searchCondition = request.getParameter("searchCondition");
+			String searchKeword = request.getParameter("searchKeword");
+						
+			// NULL 에 대한 처리
+					
+			if (searchCondition == null) {
+				searchCondition = "TITLE";
+			}
+			if (searchKeword == null) {
+				searchKeword = "";
+			}
+			
+//			System.out.println("검색 조건 : " + searchCondition);
+//			System.out.println("검색어 : " + searchKeword);
+						
 		
 			// 1. BoardDTO 객체 생성
 			BoardDTO dto = new BoardDTO();
+			
+			// 검색어를 dto에 setter 주입 후 
+			dto.setSearchCondition(searchCondition);
+			dto.setSearchKeword(searchKeword);
 			
 			// 2. BoardDAO 객체의 getBoardList(dto) 매개변수로 들어가야 함.
 			BoardDAO dao = new BoardDAO();
@@ -107,8 +128,7 @@ public class Board_Controller extends HttpServlet {
 			
 		}else if (path.equals("/getBoard.do")) {
 			System.out.println("/getBoard.do 요청");
-			//로직 처리 
-			
+			//로직 처리
 			
 			
 		// 1. client 넘어오는 파라미터 seq 변수의 값을 읽어서 dto에 저장 후 dao.getBoard(dto)
@@ -146,12 +166,13 @@ public class Board_Controller extends HttpServlet {
 			int seq = Integer.parseInt(request.getParameter("seq")); 
 			
 			// 변수값 출력 :
+			
 			/*
 			System.out.println(title);
 			System.out.println(write);
 			System.out.println(content);
 			System.out.println(seq);
-			*/ 
+			*/
 			
 			//2. 변수를 BoardDTO에 setter 주입 
 			BoardDTO dto = new BoardDTO(); 

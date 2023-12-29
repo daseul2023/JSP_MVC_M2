@@ -40,7 +40,7 @@
 		    </tr>
 		    <tr>
 				 <td bgcolor = "orange" align = "center"> 내용 </td> 
-				 <td> <textarea rows="10" cols = "70"> <%= board.getContent() %> </textarea>  </td> 		
+				 <td> <textarea rows="10" name = "content" cols = "70"> <%= board.getContent() %> </textarea>  </td> 		
 			</tr>
 			<tr>
 				 <td bgcolor = "orange" align = "center"> 등록일 </td> 

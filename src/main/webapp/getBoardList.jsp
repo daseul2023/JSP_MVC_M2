@@ -11,8 +11,8 @@ List<BoardDTO> boardList = new ArrayList<>();
 
 // 세션에서 가져온 값은 Object (기본)타입이어서 (List 타입으로 변환)
 try {
-	boardList = (List) session.getAttribute("boardList");
-
+	boardList = (List<BoardDTO>) session.getAttribute("boardList");
+	// session에서 get 가져올때 다운캐스팅 필요하다. 다운캐스팅 중요!!
 	// try ~ catch 구문 안 쓰면 jsp로 열었을 경우 do 구문이 아니기에 오류가 난다. 맨 처음에 do 구문으로 설정했기 때문에
 %>
 
@@ -26,26 +26,47 @@ try {
 	<center>
 		<h1>글 목록</h1>
 		<hr>
+		<!-- 검색 기능 추가 - 시작  -->
+		<table border = "1" width ="700px">
+			<tr><td> 
+				<form method="post" action = "getBoardList.do"> 
+					<select name ="searchCondition">
+						<option value = "TITLE"> 제목 검색 </option>
+						<option value = "WRITE"> 글쓴이 검색 </option>
+						<option value = "CONTENT"> 내용 검색 </option>
+						<option value = "REGDATE"> 날짜 검색 </option>
+					</select>
+					
+					<input type = "text" name = "searchKeword" size = "40"> 
+					<input type = "submit" value = "검색 시작"> 
+					
+				</form>			
+			</td> </tr>	
+		</table>
+		* 날짜 검색 시 : 23/12/29 형식으로 검색어에 넣으세요	
+		<!-- 검색 기능 추가 - 끝  -->
+		<p /> 
 		<table border="1" width="700px">
 			<tr>
-				<th bgcolor="orange" width="100px">번호</th>
-				<th bgcolor="blue" width="200px">제목</th>
-				<th bgcolor="green" width="150px">작성자</th>
-				<th bgcolor="pink" width="150px">등록일</th>
-				<th bgcolor="yellow" width="100px">조회수</th>
+				<th bgcolor="lime" width="100px">번호</th>
+				<th bgcolor="orange" width="200px">제목</th>
+				<th bgcolor="lime" width="150px">작성자</th>
+				<th bgcolor="orange" width="150px">등록일</th>
+				<th bgcolor="orange" width="100px">조회수</th>
 			</tr>
 
-			<!-- ArrayList의 BoardDTO를 끄집어내서 출력 : loop 돌리면서 출력 -->
+			<!-- ArrayList의 BoardDTO를 끄집어내서 출력 : loop 돌리면서 출력  -->
 			<%
 			for (BoardDTO k : boardList) {
 			%>
 
 			<tr>
 				<td align="center"><%=k.getSeq()%></td>
-				<!-- 제목에 링크를 건다 : 글 상세 내용을 볼 수 있도록 -->
+				<!-- 제목에 링크를 건다 : 글 상세 내용을 볼수 있도록  -->
 
 				<td><a href="getBoard.do?seq=<%=k.getSeq()%>"> <%=k.getTitle()%>
-				</a> <!-- href : 링크 걸 수 있는 --></td>
+				</a></td>
+
 				<td><%=k.getWrite()%></td>
 				<td><%=k.getRegdate()%></td>
 				<td><%=k.getCnt()%></td>
@@ -55,23 +76,20 @@ try {
 			}
 
 			// 모두 사용됨 : boardList
-			// 세션 변수의 값을 제거 : 서버의 메모리에서 세션 변수 boardList에 저장한 값을 제거.
+			//세션 변수의 값을 제거 : 서버의 메모리에서 세션 변수 boardList에 저장한 값을 제거 
 			session.removeAttribute("boardList");
 
 			} catch (Exception e) {
-			out.println("잘못된 주소로 요청했습니다.");
 			response.sendRedirect("getBoardList.do");
 			}
 			%>
 
-
-
-
 		</table>
 
-		<br> <a href="http://Localhost:8181/JSP_MVC_M2"> 홈으로 </a>
-		<p /> <a href="insertBoard.jsp"> 새 글 쓰기 </a>
-		
+		<br> <a href="http://localhost:8181/JSP_MVC_M2"> 홈으로 </a>
+		<p />
+		<a href="insertBoard.jsp"> 새 글쓰기</a>
+
 	</center>
 </body>
 </html>
